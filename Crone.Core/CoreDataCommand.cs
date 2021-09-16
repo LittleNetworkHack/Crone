@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record DataCommand : CoreComponent
+	public class CoreDataCommand : CoreComponent
 	{
 		#region Properties
 
@@ -29,7 +29,7 @@ namespace Crone
 
 		#region Constructors
 
-		public DataCommand(IDbConnection connection) => Command = InitializeCommand(connection);
+		public CoreDataCommand(IDbConnection connection) => Command = InitializeCommand(connection);
 		protected virtual IDbCommand InitializeCommand(IDbConnection connection) => connection.CreateCommand();
 
 		#endregion Constructors

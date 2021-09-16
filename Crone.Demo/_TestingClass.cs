@@ -97,7 +97,7 @@ namespace Crone
 		}
 
 		// DataRecord that lets us define properties using strong or dynamic name
-		public record PersonRecord : DataRecord
+		public class PersonRecord : CoreDataRecord
 		{
 			public PersonRecord() : base() { }
 			public PersonRecord(OrderedDictionary properties) : base(properties) { }
@@ -116,10 +116,12 @@ namespace Crone
 
 		// Inherit constructor for DI
 		// See other types in DataCommand.cs
-		public record PersonCommand(SqlConnection connection) : SqlDataCommand(connection)
+		public class PersonCommand : SqlDataCommand
 		{
+			public PersonCommand(SqlConnection connection) : base(connection) { }
+
 			// Compile time inferred name using CallerMemberName
-			public string FirstName
+		public string FirstName
 			{
 				get => GetProperty<string>();
 				set => SetProperty<string>(value);
@@ -135,7 +137,7 @@ namespace Crone
 				sb.AppendLine("WHERE @FirstName IS NULL OR P.FirstName LIKE @FirstName");
 
 				// Use fluid chain 
-				return base.InitializeCommand(connection).PresetCommand(sb.ToString(), CommandType.Text);
+				return base.InitializeCommand(connection).PresetDbCommand(sb.ToString(), CommandType.Text);
 				// For stored procedure:
 				//return base.InitializeCommand(connection).PresetCommand("sp_Test_Person", CommandType.StoredProcedure);
 			}
@@ -172,7 +174,7 @@ namespace Crone
 			{
 				FirstName = "Am%"
 			};
-			using var reader = new DataReader(command);
+			using var reader = new CoreDataReader(command);
 
 			var list = new List<PersonRecord>();
 			while (reader.Read())

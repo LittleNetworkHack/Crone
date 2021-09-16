@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public abstract record CoreComponent : IComponent, IDisposable
+	public abstract class CoreComponent : IComponent, IDisposable
 	{
 		#region Properties
 

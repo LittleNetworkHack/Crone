@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record DataReader : CoreComponent
+	public class CoreDataReader : CoreComponent
 	{
 		#region Properties
 
@@ -22,8 +22,8 @@ namespace Crone
 
 		#region Constructors
 
-		public DataReader(DataCommand command) => Reader = InitializeReader(command.Command);
-		public DataReader(IDbCommand command) => Reader = InitializeReader(command);
+		public CoreDataReader(CoreDataCommand command) => Reader = InitializeReader(command.Command);
+		public CoreDataReader(IDbCommand command) => Reader = InitializeReader(command);
 
 		protected virtual IDataReader InitializeReader(IDbCommand command)
 		{
@@ -62,14 +62,14 @@ namespace Crone
 			return item;
 		}
 
-		public DataRecord GetRecord()
+		public CoreDataRecord GetRecord()
 		{
 			var values = GetDictionary();
-			return new DataRecord(values);
+			return new CoreDataRecord(values);
 		}
 
 		public TRecord GetRecord<TRecord>(Func<OrderedDictionary, TRecord> constructor)
-			where TRecord : DataRecord
+			where TRecord : CoreDataRecord
 		{
 			var values = GetDictionary();
 			return constructor(values);

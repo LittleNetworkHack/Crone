@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record SqlDataCommand(SqlConnection connection) : DataCommand(connection)
+	public class SqlDataCommand : CoreDataCommand
 	{
+		public SqlDataCommand(SqlConnection connection) : base(connection) { }
+
 		protected override string GetNameOverride(string name)
 		{
 			if (string.IsNullOrEmpty(name))

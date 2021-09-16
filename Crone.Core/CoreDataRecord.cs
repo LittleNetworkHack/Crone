@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record DataRecord : CoreComponent
+	public class CoreDataRecord : CoreComponent
 	{
 		#region Properties
 
@@ -17,8 +17,8 @@ namespace Crone
 
 		#region Constructors
 
-		public DataRecord() => Properties = new OrderedDictionary();
-		public DataRecord(OrderedDictionary properties) => Properties = properties ?? new OrderedDictionary();
+		public CoreDataRecord() => Properties = new OrderedDictionary();
+		public CoreDataRecord(OrderedDictionary properties) => Properties = properties ?? new OrderedDictionary();
 
 		#endregion Constructors
 

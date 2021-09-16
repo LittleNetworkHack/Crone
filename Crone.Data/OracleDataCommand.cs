@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record OracleDataCommand(OracleConnection connection) : DataCommand(connection);
+	public class OracleDataCommand : CoreDataCommand
+	{
+		public OracleDataCommand(OracleConnection connection) : base(connection) { }
+	}
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record DataRowRecord : CoreComponent
+	public class CoreDataRow : CoreComponent
 	{
 		#region Properties
 
@@ -19,7 +19,7 @@ namespace Crone
 
 		#region Constructors
 
-		public DataRowRecord(DataRow row) => Row = row;
+		public CoreDataRow(DataRow row) => Row = row;
 
 		#endregion Constructors
 

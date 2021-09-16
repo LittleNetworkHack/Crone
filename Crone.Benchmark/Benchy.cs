@@ -42,12 +42,12 @@ namespace Crone
 		protected override IDbCommand InitializeCommand(IDbConnection connection)
 		{
 			var cmd = base.InitializeCommand(connection);
-			cmd.PresetCommand("sp_Test_Person", CommandType.StoredProcedure);
+			cmd.PresetDbCommand("sp_Test_Person", CommandType.StoredProcedure);
 			return cmd;
 		}
 	}
 
-	public record PersonRecord : DataRecord
+	public record PersonRecord : CoreDataRecord
 	{
 		public PersonRecord() : base() { }
 		public PersonRecord(OrderedDictionary properties) : base(properties) { } 

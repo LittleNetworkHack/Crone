@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public record PostgreDataCommand(NpgsqlConnection connection) : DataCommand(connection);
+	public class PostgreDataCommand : CoreDataCommand
+	{
+		public PostgreDataCommand(NpgsqlConnection connection) : base(connection) { }
+	}
 }

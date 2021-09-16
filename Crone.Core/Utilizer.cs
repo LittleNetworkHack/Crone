@@ -115,8 +115,15 @@ namespace Crone
 
 		#region Component
 
+		public static T PresetCommand<T>(this T command, string text, CommandType type = CommandType.Text) where T : CoreDataCommand
+		{
+			command.CommandText = text;
+			command.CommandType = type;
+			return command;
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IDbCommand PresetCommand(this IDbCommand command, string text, CommandType type)
+		public static T PresetDbCommand<T>(this T command, string text, CommandType type = CommandType.Text) where T : class, IDbCommand
 		{ 
 			command.CommandText = text;
 			command.CommandType = type;
