@@ -152,15 +152,17 @@ namespace Crone
 
 		#region Data
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool HasRows(this DataTable table) => table?.Rows.Count > 0;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static DataRow FirstRow(this DataTable table)
 		{
-			if (table == null || table.Rows.Count == 0)
+			if (!table.HasRows())
 				return null;
 
 			return table.Rows[0];
 		}
-
-		public static bool HasRows(this DataTable table) => table?.Rows.Count > 0;
 
 		#endregion Data
 	}
