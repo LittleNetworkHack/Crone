@@ -31,13 +31,15 @@ namespace Crone
 		}
 	}
 
-	public record PersonCommand(SqlConnection connection) : SqlDataCommand(connection)
+	public class PersonCommand: SqlDataCommand
 	{
 		public string Name
 		{
 			get => GetProperty<string>();
 			set => SetProperty<string>(value);
 		}
+
+		public  PersonCommand(SqlConnection connection) : base(connection) { }
 
 		protected override IDbCommand InitializeCommand(IDbConnection connection)
 		{
@@ -47,7 +49,7 @@ namespace Crone
 		}
 	}
 
-	public record PersonRecord : CoreDataRecord
+	public class PersonRecord : CoreDataRecord
 	{
 		public PersonRecord() : base() { }
 		public PersonRecord(OrderedDictionary properties) : base(properties) { } 
