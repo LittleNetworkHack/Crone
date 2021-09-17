@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crone.Core", "Crone.Core\Cr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crone.Data", "Crone.Data\Crone.Data.csproj", "{D7DCBCF4-05E6-460D-B698-71FF776A7C03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crone.Tests", "Crone.Tests\Crone.Tests.csproj", "{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D7DCBCF4-05E6-460D-B698-71FF776A7C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7DCBCF4-05E6-460D-B698-71FF776A7C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7DCBCF4-05E6-460D-B698-71FF776A7C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

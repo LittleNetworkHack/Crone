@@ -16,7 +16,7 @@ namespace Crone.Demo
         public Form1()
         {
             InitializeComponent();
-            btnTest.Click += (s, e) => TestingClass.TestAll();
+            btnTest.Click += (s, e) => ExampleClass.TestAll();
         }
 	}
 }

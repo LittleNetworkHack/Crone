@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Crone
 {
-	public static class TestingClass
+	public static class ExampleClass
 	{
 		public static readonly string AdventureDB = "Server=localhost;Database=AdventureWorks2019;Trusted_Connection=True;";
 
@@ -58,7 +58,7 @@ namespace Crone
 
 			decimal amount = 26M; // Some amount
 			int count = 6; // Value that causes problem while dividing
-			var result = amount.DivideEvenly(count).ToArray(); // Spreads 0.01 reminder randomly among results (used for currency, rounded to 2 decimal places!)
+			var result = amount.DivideEvenly(count).ToArray(); // Spreads 0.01 reminder pseudo randomly among results (used for currency, rounded to 2 decimal places!)
 															   // Should be: 4.33, 4.33, 4.34, 4.33, 4.34, 4.33
 		}
 

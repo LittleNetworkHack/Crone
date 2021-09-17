@@ -200,14 +200,14 @@ namespace Crone
 
 				case byte[] v:
 					return ToByteArray(v);
-				//case DateTime v:
-				//	return ToByteArray(v);
+				case DateTime v:
+					return ToByteArray(v);
 				//case TimeSpan v:
 				//	return ToByteArray(v);
 				//case XmlDocument v:
 				//	return ToByteArray(v);
-				//case Guid v:
-				//	return ToByteArray(v);
+				case Guid v:
+					return ToByteArray(v);
 				default:
 					return null;
 			}
@@ -246,6 +246,9 @@ namespace Crone
 		}
 
 		public static byte[] ToByteArray(byte[] value) => value;
+
+		public static byte[] ToByteArray(DateTime value) => BitConverter.GetBytes(value.Ticks);
+		public static byte[] ToByteArray(Guid value) => value.ToByteArray();
 
 		#endregion Binary
 
@@ -523,8 +526,8 @@ namespace Crone
 				//case ulong v:
 				//	return ToUInt64(v);
 
-				//case byte[] v:
-				//	return ToUInt64(v);
+				case byte[] v:
+					return ToDateTime(v);
 				case DateTime v:
 					return ToDateTime(v);
 				//case TimeSpan v:
@@ -541,7 +544,13 @@ namespace Crone
 		public static DateTime? ToDateTime(DateTime value) => value;
 		public static DateTime? ToDateTime(string value) => DateTime.TryParse(value, out DateTime result) ? (DateTime?)result : null;
 
-		public static DateTime? ToDateTime(long value) => new DateTime(value);
+		public static DateTime? ToDateTime(long value) => value > 0 ? new DateTime(value) : null;
+
+		public static DateTime? ToDateTime(byte[] value)
+		{
+			var ticks = ToInt64(value);
+			return ticks == null ? null : ToDateTime(ticks.Value);
+		}
 
 		#endregion DateTime
 

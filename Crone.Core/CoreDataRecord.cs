@@ -38,6 +38,9 @@ namespace Crone
 			if (Properties == null)
 				return false;
 
+			if (!Properties.Count.IndexInRange(index))
+				return false;
+
 			Properties[index] = value;
 			return true;
 		}
