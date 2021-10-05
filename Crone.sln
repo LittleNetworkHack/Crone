@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crone.Core", "Crone.Core\Cr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crone.Data", "Crone.Data\Crone.Data.csproj", "{D7DCBCF4-05E6-460D-B698-71FF776A7C03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crone.Tests", "Crone.Tests\Crone.Tests.csproj", "{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crone.Tests", "Crone.Tests\Crone.Tests.csproj", "{EDE45FF7-2822-42CA-B7BB-6E44BF1257BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AF4C1CE-AD90-44DD-8A7D-0D6B1775CA61}"
+	ProjectSection(SolutionItems) = preProject
+		.filenesting.json = .filenesting.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

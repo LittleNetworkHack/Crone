@@ -1,15 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Configurations>Debug;Release</Configurations>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
-    <ProjectReference Include="..\Crone.Data\Crone.Data.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="ExampleCommand.sql">
+			<DependentUpon>ExampleCommand.cs</DependentUpon>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
+		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectCapability Include="DynamicDependFile" />
+		<ProjectCapability Include="DynamicFileNesting" />
+	</ItemGroup>
 
 </Project>

@@ -121,7 +121,7 @@ namespace Crone
 			public PersonCommand(SqlConnection connection) : base(connection) { }
 
 			// Compile time inferred name using CallerMemberName
-		public string FirstName
+			public string FirstName
 			{
 				get => GetProperty<string>();
 				set => SetProperty<string>(value);
@@ -182,6 +182,25 @@ namespace Crone
 				var item = reader.GetRecord(v => new PersonRecord(v));
 				list.Add(item);
 			}
+
+
+			// list should contain 125 persons where names starts with Am
+			//return list;
+		}
+
+		public static void DataTableExample()
+		{
+			using var connection = new SqlConnection(AdventureDB);
+			using var command = new PersonCommand(connection)
+			{
+				FirstName = "Am%"
+			};
+			using var adapter = new SqlDataAdapter((SqlCommand)command.Command);
+			var table = new DataTable();
+			adapter.Fill(table);
+
+			var list = new List<PersonRecord>();
+
 
 			// list should contain 125 persons where names starts with Am
 			//return list;

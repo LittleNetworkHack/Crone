@@ -1,0 +1,14 @@
+{
+	"root": false,
+	"dependentFileProviders": {
+		"add": {
+			"extensionToExtension": {
+				"add": {
+					".sql": [
+						".cs"
+					]
+				}
+			}
+		}
+	}
+}

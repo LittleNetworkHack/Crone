@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -128,6 +129,14 @@ namespace Crone
 			command.CommandText = text;
 			command.CommandType = type;
 			return command;
+		}
+
+		public static T LoadEmbeddedCommand<T>(this T command, Type sourceType) where T : class, IDbCommand
+		{
+			using var stream = sourceType.Assembly.GetManifestResourceStream(sourceType.FullName);
+			using var reader = new StreamReader(stream);
+			var text = reader.ReadToEnd();
+			return PresetDbCommand(command, text, CommandType.Text);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
