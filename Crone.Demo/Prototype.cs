@@ -6,4 +6,8 @@ using System.Threading.Tasks;
 
 namespace Crone.Demo
 {
+	public static class Prototype
+	{
+
+	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +17,20 @@ namespace Crone.Demo
         public Form1()
         {
             InitializeComponent();
-            btnTest.Click += (s, e) => ExampleClass.TestAll();
+            btnTest.Click += TestClick;
+            //btnTest.Click += (s, e) => ExampleClass.TestAll();
         }
+
+        void TestClick(object sender, EventArgs args)
+		{
+            using var connection = new SqlConnection(ExampleClass.AdventureDB);
+            using var command = new Database.ExampleCommand(connection)
+            {
+                FirstName = "Amy%"
+            };
+            using var reader = new CoreDataReader(command);
+
+            reader.Read();
+		}
 	}
 }

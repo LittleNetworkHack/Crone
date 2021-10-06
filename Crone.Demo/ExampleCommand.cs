@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crone.DatabaseNs
+namespace Crone.Demo.Database
 {
 	public class ExampleCommand : SqlDataCommand
 	{

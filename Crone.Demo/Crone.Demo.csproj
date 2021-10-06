@@ -4,19 +4,16 @@
 		<TargetFramework>net5.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<Configurations>Debug;Release</Configurations>
+		<LangVersion>Preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<EmbeddedResource Include="ExampleCommand.sql">
-			<DependentUpon>ExampleCommand.cs</DependentUpon>
+		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj"/>
+		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj"/>
+	</ItemGroup>
+	<ItemGroup Label="EmbeddedCommands">
+		<None Remove="*.sql"/>
+		<EmbeddedResource Include="*.sql">
+			<DependentUpon>%(Filename).cs</DependentUpon>
 		</EmbeddedResource>
 	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
-		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectCapability Include="DynamicDependFile" />
-		<ProjectCapability Include="DynamicFileNesting" />
-	</ItemGroup>
-
 </Project>
