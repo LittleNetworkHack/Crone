@@ -10,10 +10,6 @@
 		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj"/>
 		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj"/>
 	</ItemGroup>
-	<ItemGroup Label="EmbeddedCommands">
-		<None Remove="*.sql"/>
-		<EmbeddedResource Include="*.sql">
-			<DependentUpon>%(Filename).cs</DependentUpon>
-		</EmbeddedResource>
-	</ItemGroup>
+	
+	<Import Project="..\EmbeddedCommands.props"/>
 </Project>
