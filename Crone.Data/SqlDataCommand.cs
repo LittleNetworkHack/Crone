@@ -10,16 +10,5 @@ namespace Crone
 	public class SqlDataCommand : CoreDataCommand
 	{
 		public SqlDataCommand(SqlConnection connection) : base(connection) { }
-
-		protected override string GetNameOverride(string name)
-		{
-			if (string.IsNullOrEmpty(name))
-				return name;
-
-			if (name.StartsWith('@'))
-				return name;
-
-			return "@" + name;
-		}
 	}
 }

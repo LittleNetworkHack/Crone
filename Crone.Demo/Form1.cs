@@ -23,14 +23,22 @@ namespace Crone.Demo
 
         void TestClick(object sender, EventArgs args)
 		{
+            TestSqlCommand();
+        }
+
+        void TestSqlCommand()
+		{
             using var connection = new SqlConnection(ExampleClass.AdventureDB);
-            using var command = new Database.ExampleCommand(connection)
+            using var command = new Database.ExampleSqlCommand(connection)
             {
                 FirstName = "Amy%"
             };
             using var reader = new CoreDataReader(command);
 
             reader.Read();
-		}
-	}
+
+            var x = reader.GetDictionary();
+        }
+
+    }
 }

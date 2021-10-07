@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Crone.Demo.Database
 {
-	public class ExampleCommand : SqlDataCommand
+	public class ExampleSqlCommand : SqlDataCommand
 	{
 		public string FirstName
 		{
@@ -16,7 +16,7 @@ namespace Crone.Demo.Database
 			set => SetProperty<string>(value);
 		}
 
-		public ExampleCommand(SqlConnection connection) : base(connection) { }
+		public ExampleSqlCommand(SqlConnection connection) : base(connection) { }
 
 		protected override IDbCommand InitializeCommand(IDbConnection connection)
 			=> base.InitializeCommand(connection).LoadEmbeddedCommand(GetType());
