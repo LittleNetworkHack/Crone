@@ -23,8 +23,8 @@ namespace Crone.Demo
         }
 
         void TestClick(object sender, EventArgs args)
-		{
-            //TestSqlCommand();
+        {
+            TestSqlCommand();
             TestOraCommand();
         }
 
