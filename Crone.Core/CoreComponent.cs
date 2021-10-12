@@ -96,8 +96,7 @@ namespace Crone
 
 		#region IComponent/IDisposable
 
-		public ISite Site { get; set; }
-		public IContainer Container => Site?.Container;
+		ISite IComponent.Site { get; set; }
 
 		public event EventHandler Disposed;
 
@@ -109,7 +108,7 @@ namespace Crone
 
 			lock (this)
 			{
-				Site?.Container?.Remove(this);
+				(this as IComponent).Site?.Container?.Remove(this);
 				this.InvokeEmpty(Disposed);
 			}
 		}

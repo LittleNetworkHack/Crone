@@ -5,7 +5,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Crone
@@ -48,6 +51,19 @@ namespace Crone
 			{
 				return false;
 			}
+		}
+
+		public static byte[] GetMD5Hash(string value)
+		{
+			using var hasher = MD5.Create();
+			var bytes = Encoding.UTF8.GetBytes(value);
+			return hasher.ComputeHash(bytes);
+		}
+
+		public static byte[] GetMD5Hash(Stream stream)
+		{
+			using var hasher = MD5.Create();
+			return hasher.ComputeHash(stream);
 		}
 
 		#endregion Common
@@ -174,5 +190,26 @@ namespace Crone
 		}
 
 		#endregion Data
+
+		#region JsonSerialization
+
+		public static readonly JsonSerializerOptions SerializeOptions = new JsonSerializerOptions()
+		{
+			Converters =
+			{
+				new CroneDBNullConverter()
+			}
+		};
+
+		private class CroneDBNullConverter : JsonConverter<DBNull>
+		{
+			public override DBNull Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+				=> reader.TokenType == JsonTokenType.Null ? DBNull.Value : throw new JsonException("Fail to deserialize DBNull value!");
+
+			public override void Write(Utf8JsonWriter writer, DBNull value, JsonSerializerOptions options)
+				=> writer.WriteNullValue();
+		}
+
+		#endregion JsonSerialization
 	}
 }

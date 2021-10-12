@@ -14,7 +14,7 @@ namespace Crone
 	public static class ExampleClass
 	{
 		public static readonly string OracleHRDB = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XE)));User Id=HR;Password=hr;";
-		public static readonly string AdventureDB = "Server=localhost;Database=AdventureWorks2019;Trusted_Connection=True;";
+		public static readonly string AdventureDB = "Server=localhost;Database=AdventureWorks2019;User Id=aw;Password=aw;";
 		
 
 		public static void TestAll()
