@@ -7,9 +7,8 @@
 		<LangVersion>Preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj"/>
-		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj"/>
+		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
+		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj" />
 	</ItemGroup>
-	
-	<Import Project="..\EmbeddedCommands.props"/>
+	<Import Project="$(SolutionDir)EmbeddedCommands.props"/>
 </Project>
