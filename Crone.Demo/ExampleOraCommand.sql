@@ -1,0 +1,4 @@
+﻿SELECT  *
+FROM    HR.EMPLOYEES
+WHERE   SALARY > :Salary
+AND		(FIRST_NAME LIKE :FirstName OR :FirstName IS NULL)

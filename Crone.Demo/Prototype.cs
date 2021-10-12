@@ -8,6 +8,8 @@ namespace Crone.Demo
 {
 	public static class Prototype
 	{
-
+		public static void Test()
+		{
+		}
 	}
 }

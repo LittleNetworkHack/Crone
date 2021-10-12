@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,7 +24,8 @@ namespace Crone.Demo
 
         void TestClick(object sender, EventArgs args)
 		{
-            TestSqlCommand();
+            //TestSqlCommand();
+            TestOraCommand();
         }
 
         void TestSqlCommand()
@@ -40,5 +42,19 @@ namespace Crone.Demo
             var x = reader.GetDictionary();
         }
 
+        void TestOraCommand()
+        {
+            using var connection = new OracleConnection(ExampleClass.OracleHRDB);
+            using var command = new Database.ExampleOraCommand(connection)
+            {
+                //FirstName = "A%",
+                Salary = 5000
+            };
+            using var reader = new CoreDataReader(command);
+
+            reader.Read();
+
+            var x = reader.GetDictionary();
+        }
     }
 }
