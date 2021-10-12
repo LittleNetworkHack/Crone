@@ -29,7 +29,7 @@ namespace Crone.Demo
         }
 
         void TestSqlCommand()
-		{
+        {
             using var connection = new SqlConnection(ExampleClass.AdventureDB);
             using var command = new Database.ExampleSqlCommand(connection)
             {
