@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
+	[JsonConverter(typeof(CoreDataRecordJsonConverter))]
 	public class CoreDataRecord : CoreComponent
 	{
 		#region Properties
 
-		protected OrderedDictionary Properties { get; set; } = new OrderedDictionary();
+		protected internal OrderedDictionary Properties { get; set; } = new OrderedDictionary();
 
 		#endregion Properties
 
@@ -23,6 +17,8 @@ namespace Crone
 		#endregion Constructors
 
 		#region Get/Set Core
+
+		protected override string GetNameOverride(string name) => name?.ToUpperInvariant();
 
 		protected override bool GetValueCore(int index, out object value)
 		{

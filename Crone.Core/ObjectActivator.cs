@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public interface IObjectActivator
 	{
@@ -49,6 +41,7 @@ namespace Crone
 	{
 		#region Helpers
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Type AsGeneric(Type type, params Type[] typeArguments)
 		{
 			return typeArguments?.Length > 0 ? type.MakeGenericType(typeArguments) : type;
@@ -72,7 +65,16 @@ namespace Crone
 
 		private static Dictionary<Type, IObjectActivator> Cache = new Dictionary<Type, IObjectActivator>();
 
-		private static IObjectActivator<T> EnsureCache<T>() => (IObjectActivator<T>)EnsureCache(typeof(T));
+		private static IObjectActivator<T> EnsureCache<T>()
+		{
+			var type = typeof(T);
+			if (Cache.TryGetValue(type, out var creator))
+				return (IObjectActivator<T>)creator;
+
+			creator = new ObjectActivator<T>();
+			Cache[type] = creator;
+			return (IObjectActivator<T>)creator;
+		}
 		private static IObjectActivator EnsureCache(Type type)
 		{
 			if (Cache.TryGetValue(type, out var creator))

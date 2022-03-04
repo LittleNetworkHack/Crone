@@ -17,8 +17,8 @@ namespace Crone.Demo
     {
         public Form1()
         {
-            InitializeComponent();
-            btnTest.Click += TestClick;
+            //InitializeComponent();
+            //btnTest.Click += TestClick;
             //btnTest.Click += (s, e) => ExampleClass.TestAll();
         }
 
@@ -47,14 +47,29 @@ namespace Crone.Demo
             using var connection = new OracleConnection(ExampleClass.OracleHRDB);
             using var command = new Database.ExampleOraCommand(connection)
             {
-                //FirstName = "A%",
-                Salary = 5000
+                Title = "Kontakt%",
+                Count = default,
+                //Data = default
             };
             using var reader = new CoreDataReader(command);
+
+
 
             reader.Read();
 
             var x = reader.GetDictionary();
         }
-    }
+
+		private void InitializeComponent()
+		{
+			this.SuspendLayout();
+			// 
+			// Form1
+			// 
+			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.Name = "Form1";
+			this.ResumeLayout(false);
+
+		}
+	}
 }

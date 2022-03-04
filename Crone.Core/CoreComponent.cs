@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
-	public abstract class CoreComponent : IComponent, IDisposable
+	public abstract class CoreComponent : IDisposable
 	{
 		#region Properties
 
@@ -30,12 +21,6 @@ namespace Crone
 
 		protected virtual string GetNameOverride(string name) => name;
 
-		protected virtual object GetValueDefault(int index) => null;
-		protected virtual void SetValueDefault(int index, object value) { }
-
-		protected virtual object GetValueDefault(string name) => null;
-		protected virtual void SetValueDefault(string name, object value) { }
-
 		protected abstract bool GetValueCore(int index, out object value);
 		protected abstract bool SetValueCore(int index, object value);
 
@@ -43,6 +28,16 @@ namespace Crone
 		protected abstract bool SetValueCore(string name, object value);
 
 		#endregion Get/Set Core
+
+		#region Get/Set Default
+
+		protected virtual object GetValueDefault(int index) => null;
+		protected virtual void SetValueDefault(int index, object value) { }
+
+		protected virtual object GetValueDefault(string name) => null;
+		protected virtual void SetValueDefault(string name, object value) { }
+
+		#endregion Get/Set Default
 
 		#region Get/Set Value
 
@@ -81,23 +76,30 @@ namespace Crone
 			SetValueDefault(name, value);
 		}
 
-		protected T GetProperty<T>([CallerMemberName] string name = null)
+		#endregion Get/Set Value
+
+		#region Get/Set Property
+
+		protected virtual T GetProperty<T>([CallerMemberName] string name = null)
 		{
 			var value = GetValue(name);
 			return ValueConverter.ConvertTo<T>(value);
 		}
-		protected void SetProperty<T>(object value, [CallerMemberName] string name = null)
+		protected virtual void SetProperty<T>(object value, [CallerMemberName] string name = null)
 		{
 			value = ValueConverter.ConvertTo<T>(value);
 			SetValue(name, value);
 		}
 
-		#endregion Get/Set Value
+		#endregion Get/Set Property
 
-		#region IComponent/IDisposable
+		#region Events
 
-		public ISite Site { get; set; }
-		public IContainer Container => Site?.Container;
+		protected void InvokeEmpty(EventHandler handler) => handler?.Invoke(this, EventArgs.Empty);
+
+		#endregion Events
+
+		#region IDisposable
 
 		public event EventHandler Disposed;
 
@@ -109,8 +111,7 @@ namespace Crone
 
 			lock (this)
 			{
-				Site?.Container?.Remove(this);
-				this.InvokeEmpty(Disposed);
+				InvokeEmpty(Disposed);
 			}
 		}
 		public void Dispose()

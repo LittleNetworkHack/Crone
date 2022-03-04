@@ -1,10 +1,4 @@
-﻿using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Oracle.ManagedDataAccess.Types;
 
 namespace Crone
 {
@@ -18,5 +12,28 @@ namespace Crone
 			command.BindByName = true;
 			return command;
 		}
+
+		protected override T GetProperty<T>([CallerMemberName] string name = null)
+		{
+			if (typeof(T) == typeof(OracleDataReader))
+			{
+				var value = GetValue(name);
+				return value is T reader ? reader : default(T);
+			}
+
+			return base.GetProperty<T>(name);
+		}
+
+		protected override void SetProperty<T>(object value, [CallerMemberName] string name = null)
+		{
+			if (typeof(T) == typeof(OracleDataReader))
+			{
+				SetValue(name, OracleRefCursor.Null);
+				return;
+			}
+			base.SetProperty<T>(value, name);
+		}
+
+		protected override string GetNameOverride(string name) => $"p_{name}";
 	}
 }

@@ -1,16 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
-using Oracle.ManagedDataAccess.Client;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public static class CroneDataExtensions
 	{

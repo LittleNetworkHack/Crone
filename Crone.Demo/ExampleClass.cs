@@ -1,15 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public static class ExampleClass
 	{
@@ -206,6 +195,73 @@ namespace Crone
 
 			// list should contain 125 persons where names starts with Am
 			//return list;
+		}
+
+		public static ArgumentedMethodResult ArgumentedMethod(ArgumentedMethodArgs args)
+		{
+			return new ArgumentedMethodResult()
+			{
+				Value = args.Prop1 + args.Prop2 + args.Prop3
+			};
+		}
+
+		public class ArgumentedMethodArgs : CoreDataRecord
+		{
+			public int Prop1
+			{
+				get => GetProperty<int>();
+				set => SetProperty<int>(value);
+			}
+			public string Prop2
+			{
+				get => GetProperty<string>();
+				set => SetProperty<string>(value);
+			}
+			public DateTime Prop3
+			{
+				get => GetProperty<DateTime>();
+				set => SetProperty<DateTime>(value);
+			}
+		}
+
+		public class ArgumentedMethodResult : CoreDataRecord
+		{
+			public string Value
+			{
+				get => GetProperty<string>();
+				set => SetProperty<string>(value);
+			}
+		}
+
+		public static void TestRecordJson()
+		{
+			var items = new[]
+			{
+				new PersonRecord(),
+				new PersonRecord()
+				{
+					FirstName = null,
+					BusinessEntityID = null
+				},
+				new PersonRecord()
+				{
+					FirstName = "Hello",
+					BusinessEntityID = 27
+				},
+				new PersonRecord()
+				{
+					FirstName = null,
+					BusinessEntityID = 27
+				},
+				new PersonRecord()
+				{
+					FirstName = "Hello",
+					BusinessEntityID = null
+				}
+			};
+
+			var text = JsonSerializer.Serialize(items);
+			var items2 = JsonSerializer.Deserialize<PersonRecord[]>(text);
 		}
 	}
 }

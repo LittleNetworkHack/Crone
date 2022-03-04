@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public delegate void PropertySetter<TClass, TMember>(TClass instance, TMember value);
 	public delegate TMember PropertyGetter<TClass, TMember>(TClass instance);

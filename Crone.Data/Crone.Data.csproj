@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Crone</RootNamespace>
 		<Description>Data utilities for .NET projects</Description>
 		<Configurations>Debug;Release</Configurations>
 		<Version>1.0.1</Version>
+		<LangVersion>preview</LangVersion>
 		<PackageOutputPath>C:\nugets</PackageOutputPath>
 	</PropertyGroup>
 	
@@ -15,9 +16,9 @@
 		<PackageReference Include="Npgsql" Version="5.0.7" />
 		<PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.3" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
+	  <ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
 	</ItemGroup>
 
 </Project>

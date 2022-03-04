@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public class CoreDataReader : CoreComponent
 	{
+
 		#region Properties
 
 		public int Count { get; protected set; }
@@ -24,6 +16,7 @@ namespace Crone
 
 		public CoreDataReader(CoreDataCommand command) => Reader = InitializeReader(command.Command);
 		public CoreDataReader(IDbCommand command) => Reader = InitializeReader(command);
+		public CoreDataReader(IDataReader reader) => Reader = InitializeReader(reader);
 
 		protected virtual IDataReader InitializeReader(IDbCommand command)
 		{
@@ -32,8 +25,12 @@ namespace Crone
 				connection.Open();
 
 			var reader = command.ExecuteReader();
+			return InitializeReader(reader);
+		}
+
+		protected virtual IDataReader InitializeReader(IDataReader reader)
+		{
 			Count = reader.FieldCount;
-			
 			Names = new string[Count];
 			for (int i = 0; i < Count; i++)
 				Names[i] = reader.GetName(i);
@@ -46,33 +43,13 @@ namespace Crone
 		#region Methods
 
 		public bool Read() => Reader.Read();
-		public bool NextResult() => Reader.NextResult();
-
-		public OrderedDictionary GetDictionary()
+		public bool NextResult()
 		{
-			var item = new OrderedDictionary(Count);
-			for (int i = 0; i < Count; i++)
-			{
-				var name = Names[i];
-				if (string.IsNullOrEmpty(name))
-					continue;
+			if (!Reader.NextResult())
+				return false;
 
-				item.Add(name, GetValue(i));
-			}
-			return item;
-		}
-
-		public CoreDataRecord GetRecord()
-		{
-			var values = GetDictionary();
-			return new CoreDataRecord(values);
-		}
-
-		public TRecord GetRecord<TRecord>(Func<OrderedDictionary, TRecord> constructor)
-			where TRecord : CoreDataRecord
-		{
-			var values = GetDictionary();
-			return constructor(values);
+			InitializeReader(Reader);
+			return true;
 		}
 
 		#endregion Methods
@@ -107,8 +84,9 @@ namespace Crone
 			}
 		}
 
-		protected override bool SetValueCore(int index, object value) => throw new NotSupportedException();
-		protected override bool SetValueCore(string name, object value) => throw new NotSupportedException();
+		const string err_cant_set_val = "IDataReader is read-only!";
+		protected override bool SetValueCore(int index, object value) => throw new NotSupportedException(err_cant_set_val);
+		protected override bool SetValueCore(string name, object value) => throw new NotSupportedException(err_cant_set_val);
 
 		#endregion Get/Set Core
 

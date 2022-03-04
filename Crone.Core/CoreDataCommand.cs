@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public class CoreDataCommand : CoreComponent
 	{
@@ -48,7 +41,6 @@ namespace Crone
 		}
 		protected IDataParameter ResolveParameter(string name)
 		{
-			name = GetNameOverride(name);
 			if (Parameters == null)
 				return null;
 
@@ -56,6 +48,14 @@ namespace Crone
 				return null;
 
 			return (IDataParameter)Parameters[name];
+		}
+
+		protected virtual IDataParameter CreateParameter(string name, object value)
+		{
+			var parameter = Command.CreateParameter();
+			parameter.ParameterName = name.EmptyIfNull();
+			parameter.Value = value;
+			return parameter;
 		}
 
 		#endregion Parameter
@@ -77,12 +77,14 @@ namespace Crone
 				return false;
 
 			var parameter = ResolveParameter(index);
-			if (parameter == null)
+			if (parameter != null)
 			{
-				parameter = Command.CreateParameter();
-				Parameters.Insert(index, parameter);
+				parameter.Value = value;
+				return true;
 			}
-			parameter.Value = value;
+			
+			parameter = CreateParameter(null, value);
+			Parameters.Insert(index, parameter);
 			return true;
 		}
 		protected override bool GetValueCore(string name, out object value)
@@ -101,15 +103,16 @@ namespace Crone
 				return false;
 
 			var parameter = ResolveParameter(name);
-			if (parameter == null)
+			if (parameter != null)
 			{
-				parameter = Command.CreateParameter();
-				parameter.ParameterName = name;
-				Parameters.Add(parameter);
+				parameter.Value = value;
+				return true;
 			}
-			parameter.Value = value;
+
+			parameter = CreateParameter(name, value);
+			Parameters.Add(parameter);
 			return true;
-		} 
+		}
 		#endregion Get/Set Core
 
 		#region IDisposable

@@ -1,3 +1,5 @@
 {
-	"root": false
+	"root": false,
+	"dependentFileProviders": {
+	}
 }

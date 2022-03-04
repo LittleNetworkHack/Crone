@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Xml;
-
-namespace Crone
+﻿namespace Crone
 {
-	public static partial class ValueConverter
+	public static class ValueConverter
 	{
 		#region Helpers
 
@@ -34,7 +25,14 @@ namespace Crone
 			typeof(Guid)
 		};
 
-		public static bool IsPrimitive(Type type) => type.IsEnum || Primitives.Contains(type) || Primitives.Contains(Nullable.GetUnderlyingType(type));
+		public static bool IsPrimitive(Type type)
+		{
+			if (type == null)
+				return false;
+
+			type = Nullable.GetUnderlyingType(type) ?? type;
+			return type.IsEnum || Primitives.Contains(type);
+		}
 
 		public static TValue? TryCast<TValue>(object value)
 			where TValue : struct
@@ -48,6 +46,8 @@ namespace Crone
 				return null;
 			}
 		}
+
+		public static object GetDefaultValue(Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
 
 		#endregion Helpers
 
@@ -63,77 +63,97 @@ namespace Crone
 
 		public static object ConvertTo(object value, Type destType, object defaultValue)
 		{
-			if (value.IsNullOrDBNull())
+			try
+			{
+				// if null
+				if (value == null || value == DBNull.Value || destType == null)
+					return defaultValue;
+
+				var srcType = value?.GetType();
+				// if no conversion required
+				if (destType == typeof(object) || srcType == destType)
+					return value;
+
+				// If enum we need intermediate conversion
+				if (srcType.IsEnum)
+				{
+					// Get enum base type
+					srcType = Enum.GetUnderlyingType(srcType);
+					// Convert to base type
+					value = ConvertTo(value, srcType);
+					// Convert again to dest type
+					return ConvertTo(value, destType, defaultValue);
+				}
+
+				// We treat T and T? as same
+				destType = Nullable.GetUnderlyingType(destType) ?? destType;
+
+				if (destType.IsEnum)
+					value = ToEnum(value, destType);
+				else if (destType == typeof(bool))
+					value = ToBoolean(value);
+				else if (destType == typeof(char))
+					value = ToChar(value);
+				else if (destType == typeof(string))
+					value = ToString(value);
+
+				else if (destType == typeof(float))
+					value = ToSingle(value);
+				else if (destType == typeof(double))
+					value = ToDouble(value);
+				else if (destType == typeof(decimal))
+					value = ToDecimal(value);
+
+				else if (destType == typeof(byte))
+					value = ToByte(value);
+				else if (destType == typeof(short))
+					value = ToInt16(value);
+				else if (destType == typeof(int))
+					value = ToInt32(value);
+				else if (destType == typeof(long))
+					value = ToInt64(value);
+
+				else if (destType == typeof(sbyte))
+					value = ToSByte(value);
+				else if (destType == typeof(ushort))
+					value = ToUInt16(value);
+				else if (destType == typeof(uint))
+					value = ToUInt32(value);
+				else if (destType == typeof(ulong))
+					value = ToUInt64(value);
+
+				else if (destType == typeof(byte[]))
+					value = ToByteArray(value);
+				else if (destType == typeof(DateTime))
+					value = ToDateTime(value);
+				//else if (destType == typeof(TimeSpan))
+				//	value = ToUInt32(value);
+				else if (destType == typeof(Guid))
+					value = ToGuid(value);
+
+				return value ?? defaultValue;
+			}
+			catch
+			{
+#if DEBUG
+				System.Diagnostics.Debugger.Break();
+#endif
 				return defaultValue;
-
-			if (destType == typeof(object))
-				return value;
-
-			Type srcType = value.GetType();
-			if (srcType == destType)
-				return value;
-
-			destType = Nullable.GetUnderlyingType(destType) ?? destType;
-
-			Type enumType = srcType.IsEnum ? Enum.GetUnderlyingType(srcType) : null;
-			if (enumType != null && enumType != destType)
-				value = ConvertTo(value, enumType);
-
-			if (destType.IsEnum)
-				value = ToEnum(value, destType);
-			else if (destType == typeof(bool))
-				value = ToBoolean(value);
-			else if (destType == typeof(char))
-				value = ToChar(value);
-			else if (destType == typeof(string))
-				value = ToString(value);
-
-			else if (destType == typeof(float))
-				value = ToSingle(value);
-			else if (destType == typeof(double))
-				value = ToDouble(value);
-			else if (destType == typeof(decimal))
-				value = ToDecimal(value);
-
-			else if (destType == typeof(byte))
-				value = ToByte(value);
-			else if (destType == typeof(short))
-				value = ToInt16(value);
-			else if (destType == typeof(int))
-				value = ToInt32(value);
-			else if (destType == typeof(long))
-				value = ToInt64(value);
-
-			else if (destType == typeof(sbyte))
-				value = ToSByte(value);
-			else if (destType == typeof(ushort))
-				value = ToUInt16(value);
-			else if (destType == typeof(uint))
-				value = ToUInt32(value);
-			else if (destType == typeof(ulong))
-				value = ToUInt64(value);
-
-			else if (destType == typeof(byte[]))
-				value = ToByteArray(value);
-			else if (destType == typeof(DateTime))
-				value = ToDateTime(value);
-			//else if (destType == typeof(TimeSpan))
-			//	value = ToUInt32(value);
-			else if (destType == typeof(Guid))
-				value = ToGuid(value);
-
-			return value ?? defaultValue;
+			}
 		}
 
 		public static object ConvertTo(object value, Type destType)
 		{
-			object defaultValue = ObjectActivator.GetDefaultOrNull(destType);
+			if (destType == null)
+				return value;
+
+			var defaultValue = GetDefaultValue(destType);
 			return ConvertTo(value, destType, defaultValue);
 		}
 
 		public static IEnumerable<T> ConvertAll<T>(this IEnumerable values)
 		{
-			foreach (object item in values)
+			foreach (var item in values)
 				yield return ConvertTo<T>(item);
 		}
 

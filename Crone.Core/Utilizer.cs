@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crone
+﻿namespace Crone
 {
 	public static class Utilizer
 	{
@@ -17,38 +7,6 @@ namespace Crone
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNullOrDBNull(this object value) 
 			=> value == null || value == DBNull.Value;
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsOneOf<T>(this T value, params T[] values)
-			=> values.Any(v => EqualityComparer<T>.Default.Equals(value, v));
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool TryExecute(Action action)
-		{
-			try
-			{
-				action();
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool TryExecute<TArg>(Action<TArg> action, TArg value)
-		{
-			try
-			{
-				action(value);
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
 
 		#endregion Common
 
@@ -105,59 +63,14 @@ namespace Crone
 		{
 			while (count > 0)
 			{
-				decimal amount = Math.Round(total / count, round);
-				total -= amount;
-				count--;
-				yield return amount;
+				var value = Math.Round(total / count, round);
+				total -= value;
+				count -= 1;
+				yield return value;
 			}
 		}
 
 		#endregion Math
-
-		#region Component
-
-		public static T PresetCommand<T>(this T command, string text, CommandType type = CommandType.Text) where T : CoreDataCommand
-		{
-			command.CommandText = text;
-			command.CommandType = type;
-			return command;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static T PresetDbCommand<T>(this T command, string text, CommandType type = CommandType.Text) where T : class, IDbCommand
-		{ 
-			command.CommandText = text;
-			command.CommandType = type;
-			return command;
-		}
-
-		public static T LoadEmbeddedCommand<T>(this T command, Type sourceType) where T : class, IDbCommand
-		{
-			using var stream = sourceType.Assembly.GetManifestResourceStream(sourceType.FullName);
-			using var reader = new StreamReader(stream);
-			var text = reader.ReadToEnd();
-			return PresetDbCommand(command, text, CommandType.Text);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void InvokeEmpty(this IComponent component, EventHandler handler)
-			=> handler?.Invoke(component, EventArgs.Empty);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void TryDispose(this object value)
-			=> TryDispose(value as IDisposable);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void TryDispose(this IDisposable value)
-		{
-			try
-			{
-				value?.Dispose();
-			}
-			catch { }
-		}
-
-		#endregion Component
 
 		#region Data
 
@@ -165,14 +78,50 @@ namespace Crone
 		public static bool HasRows(this DataTable table) => table?.Rows.Count > 0;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static DataRow FirstRow(this DataTable table)
-		{
-			if (!table.HasRows())
-				return null;
-
-			return table.Rows[0];
-		}
+		public static DataRow FirstRow(this DataTable table) => table.HasRows() ? table.Rows[0] : null;
 
 		#endregion Data
+
+		#region Linq
+
+		public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+		{
+			foreach(var item in source)
+				action(item);
+		}
+
+		public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, bool condition, Func<TSource, bool> predicate)
+		{
+			if (!condition)
+				return source;
+
+			return source.Where(predicate);
+		}
+
+		public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, bool condition, Func<TSource, int, bool> predicate)
+		{
+			if (!condition)
+				return source;
+
+			return source.Where(predicate);
+		}
+
+		public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, bool condition, Expression<Func<TSource, bool>> predicate)
+		{
+			if (!condition)
+				return query;
+
+			return query.Where(predicate);
+		}
+
+		public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> query, bool condition, Expression<Func<TSource, int, bool>> predicate)
+		{
+			if (!condition)
+				return query;
+
+			return query.Where(predicate);
+		}
+
+		#endregion Linq
 	}
 }

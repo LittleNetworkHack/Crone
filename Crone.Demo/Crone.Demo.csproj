@@ -1,14 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net5.0-windows</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<Configurations>Debug;Release</Configurations>
 		<LangVersion>Preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.Experimental.Collections" Version="1.0.6-e190117-3" />
+	</ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="..\Crone.Core\Crone.Core.csproj" />
 		<ProjectReference Include="..\Crone.Data\Crone.Data.csproj" />
 	</ItemGroup>
-	<Import Project="$(SolutionDir)EmbeddedCommands.props"/>
+	<Import Project="$(SolutionDir)EmbeddedCommands.props" />
 </Project>
