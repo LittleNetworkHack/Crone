@@ -1,11 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
 		<RootNamespace>Crone</RootNamespace>
-		<Description>Core utilities for .NET projects</Description>
-		<Configurations>Debug;Release</Configurations>
-		<Version>1.0.1</Version>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>Crone</Company>
+		<Authors>LittleNetworkHack</Authors>
+		<Description>Shared project utilities</Description>
+		<Version>2.0.0</Version>
 	</PropertyGroup>
-	
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.9" />
+		<PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.160" />
+		<PackageReference Include="System.Text.Json" Version="6.0.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectCapability Include="ConfigurableFileNesting" />
+		<ProjectCapability Include="ConfigurableFileNestingFeatureEnabled" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Crone.BCL\Crone.BCL.csproj" />
+	</ItemGroup>
+
 </Project>
