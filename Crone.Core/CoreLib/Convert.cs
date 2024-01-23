@@ -140,7 +140,7 @@ public static partial class CoreLib
                 var type when type == typeof(Guid) => ToGuid(value),
                 _ => defaultValue
             };
-            return value;
+            return value ?? defaultValue;
         }
         catch
         {
@@ -1282,7 +1282,7 @@ public static partial class CoreLib
         }
     }
 
-    public static string ToString(bool value) => value ? bool.TrueString : bool.FalseString;
+    public static string ToString(bool value) => value ? "true" : "false";
     public static string ToString(char value) => new string(value, 1);
     public static string ToString(string value) => value;
 
@@ -1301,7 +1301,7 @@ public static partial class CoreLib
     public static string ToString(decimal value) => value.ToString();
 
     public static string ToString(byte[] value) => OutOfRangeBinary(value, 0) ? null : Encoding.UTF8.GetString(value);
-    public static string ToString(DateTime value) => value.ToString();
+    public static string ToString(DateTime value) => value.ToString("O");
 
     #endregion String
 

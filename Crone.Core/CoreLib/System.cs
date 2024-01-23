@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Crone;
+﻿namespace Crone;
 
 public static partial class CoreLib
 {

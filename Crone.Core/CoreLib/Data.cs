@@ -48,7 +48,13 @@ public static partial class CoreLib
         return result;
     }
 
-    public static IEnumerable<T> MapTo<T>(this IEnumerable<CoreObject> source)
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static void SetValue<T>(this OrderedDictionary item, string name, object value)
+	{
+        item[name] = ConvertTo<T>(value);
+	}
+
+	public static IEnumerable<T> MapTo<T>(this IEnumerable<CoreObject> source)
     {
         var properties = GetPropertiesMap<T>();
         foreach (var row in source)
@@ -66,9 +72,41 @@ public static partial class CoreLib
         }
     }
 
-    //public static CoreDataTable ToCoreTable(this IEnumerable<CoreDataRow> source)
-    //{
-    //    var list = source.ToList();
-    //    return new CoreDataTable(list);
-    //}
+	public static DataTable GetDataTable(this CoreDataTable @this, OrderedDictionary<string, Type> columns)
+	{
+		var table = new DataTable();
+		foreach (var key in columns.Keys)
+		{
+			var type = columns[key];
+			columns[key] = Nullable.GetUnderlyingType(type) ?? type;
+		}
+		foreach (var item in @this)
+		{
+			var row = table.NewRow();
+			foreach (var (name, type) in columns)
+			{
+				var value = item.TryGetValue(name, out var v) ? v : null;
+				value = ConvertTo(value, type);
+				row[name] = value ?? DBNull.Value;
+			}
+			table.Rows.Add(row);
+		}
+		return table;
+	}
+
+	public static T[] GetValueArray<T>(this ICoreObject @this, string key)
+	{
+		if (!@this.TryGetValue(key, out IEnumerable<object> list) || list is null)
+		{
+			return Array.Empty<T>();
+		}
+		var result = list.Select(e => ConvertTo<T>(e)).ToArray();
+		return result;
+	}
+
+	//public static CoreDataTable ToCoreTable(this IEnumerable<CoreDataRow> source)
+	//{
+	//    var list = source.ToList();
+	//    return new CoreDataTable(list);
+	//}
 }

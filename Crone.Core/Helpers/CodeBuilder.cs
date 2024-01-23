@@ -51,7 +51,7 @@ public sealed class CodeBuilder
 
     public CodeBuilder AppendLine(string value)
     {
-        if (value.Length != 0)
+		if (value?.Length != 0)
         {
             DoIndent();
         }
@@ -62,6 +62,10 @@ public sealed class CodeBuilder
 
     public CodeBuilder AppendLines(string value, bool skipFinalNewline = false)
     {
+        if (value is null)
+        {
+            return this;
+        }
         var first = true;
         string line;
         using var reader = new StringReader(value);
@@ -89,7 +93,11 @@ public sealed class CodeBuilder
 
     public CodeBuilder AppendIf(bool condition, string value)
     {
-        if (condition)
+		if (value is null)
+		{
+			return this;
+		}
+		if (condition)
         {
             Append(value);
         }
@@ -98,7 +106,11 @@ public sealed class CodeBuilder
 
     public CodeBuilder AppendLineIf(bool condition, string value)
     {
-        if (condition)
+		if (value is null)
+		{
+			return this;
+		}
+		if (condition)
         {
             AppendLine(value);
         }
